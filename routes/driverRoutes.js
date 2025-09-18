@@ -101,7 +101,7 @@ router.get("/startRide/:id", authMiddleware, async (req, res) => {
       .eq('status',"accepted")
       .select()
     if (err) {
-      return res.status(402).json({ error: err.message });
+      return res.status(402).json({ error: "alredy Started" });
     }
     return res.status(200).json({ message: "Ride started now ", res: rideStart });
 

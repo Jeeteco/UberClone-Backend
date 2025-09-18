@@ -32,24 +32,54 @@ router.post("/bookride/:id", authMiddleware, async (req, res) => {
 
 })
 
-router.get("/getRides/:id",authMiddleware,async(req,res)=>{
-  const {id}=req.params
+//fetch live ride
+router.get("/getLiveRide/:rider_id", authMiddleware, async (req, res) => {
+  const { rider_id } = req.params
 
   try {
 
-    const {data,error}=await supabase
+    const { data, error } = await supabase
       .from("rides")
       .select("*")
-      .eq("rider_id",id)
-      .eq("status","completed");
-    if(error)return res.status(402).json({error:error.message})
-    
-    return res.status(200).json({message:"My Rides Fetch Sucessfuly",ride:data})
+      .in("status", ["started", "ongoing","accepted"])
+      .eq('rider_id',rider_id) ;
 
-    
+    if (error) {
+      console.error("Error fetching rides:", error.message);
+      return;
+    }
+
+    return res.status(200).json({message:"live Ride status",data:data})
+
+
+
   } catch (error) {
     console.error(error.mesage)
-    
+
+  }
+})
+
+
+
+//ride history
+router.get("/getRides/:id", authMiddleware, async (req, res) => {
+  const { id } = req.params
+
+  try {
+
+    const { data, error } = await supabase
+      .from("rides")
+      .select("*")
+      .eq("rider_id", id)
+      .eq("status", "completed");
+    if (error) return res.status(402).json({ error: error.message })
+
+    return res.status(200).json({ message: "My Rides Fetch Sucessfuly", ride: data })
+
+
+  } catch (error) {
+    console.error(error.mesage)
+
   }
 })
 
@@ -58,7 +88,7 @@ router.get("/getRides/:id",authMiddleware,async(req,res)=>{
 
 //ride cancellation route
 
-router.put('/cancelRide/:rider_id/:id',authMiddleware, async (req, res) => {
+router.put('/cancelRide/:rider_id/:id', authMiddleware, async (req, res) => {
 
   try {
     const { id, rider_id } = req.params;
