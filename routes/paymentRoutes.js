@@ -1,10 +1,11 @@
-import express from "express";
-import Stripe from "stripe";
-import { createClient } from "@supabase/supabase-js";
+const express = require("express");
+const stripe =require('stripe');
+
+const supabase = require("../config/supabaseClient.js");
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
 
 // Create payment intent
 router.post("/create-payment", async (req, res) => {
