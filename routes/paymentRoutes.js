@@ -48,4 +48,4 @@ router.post("/create-payment", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router
