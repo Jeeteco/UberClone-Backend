@@ -41,7 +41,7 @@ router.get("/getLiveRide/:rider_id", authMiddleware, async (req, res) => {
     const { data, error } = await supabase
       .from("rides")
       .select("*")
-      .in("status", ["started", "ongoing","accepted"])
+      .in("status", ["started", "ongoing","accepted","reqested"])
       .eq('rider_id',rider_id) ;
 
     if (error) {
